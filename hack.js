@@ -53,5 +53,5 @@ var list =[
 "yzha2506",
 ];
 for(let l of list){
-  console.log(hs("aelt7654"));
+  console.log(hs(l));
 }

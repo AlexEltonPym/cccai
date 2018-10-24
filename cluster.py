@@ -32,92 +32,92 @@ assignment = "a0"
 
 
 tests = [
-	('Everything', [enjoy, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], []),
+  ('Everything', [enjoy, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], []),
 ]
 
 
 
 def main():
-	dataset = loadDataset('mvp2.csv')
+  dataset = loadDataset('mvp2.csv')
 
-	samples = splitDataset(dataset, tests[0], sampleCount)
+  samples = splitDataset(dataset, tests[0], sampleCount)
 
-	results = runManifold(samples)
-	printResults(results)
+  results = runManifold(samples)
+  printResults(results)
 
-	plotResults(results)
+  plotResults(results)
 
 def plotResults(results):
-	embedment, clusters = results
-	X = [x[0] for x in embedment]
-	Y = [y[1] for y in embedment]
-	
-	area = 10  # 0 to 15 point radii
-	plt.set_cmap('Accent')
+  embedment, clusters = results
+  X = [x[0] for x in embedment]
+  Y = [y[1] for y in embedment]
+  
+  area = 10  # 0 to 15 point radii
+  plt.set_cmap('Accent')
 
-	plt.scatter(X, Y, s=area, c=clusters)
-	plt.savefig("clusterfigk"+str(kclusters)+".png")
+  plt.scatter(X, Y, s=area, c=clusters)
+  plt.savefig("clusterfigk"+str(kclusters)+".svg")
 
 
 
 def loadDataset(filename):
-	with open(filename, 'r') as csvfile:
-		reader = csv.DictReader(csvfile)
+  with open(filename, 'r') as csvfile:
+    reader = csv.DictReader(csvfile)
 
-		dataset = np.zeros((sampleCount, 1 + questionCount)) #initialise dataset array
+    dataset = np.zeros((sampleCount, 1 + questionCount)) #initialise dataset array
 
-		i = 0
-		for row in reader:
-			datum = np.array(int(row['u'])) #create user like this: 0000100000
+    i = 0
+    for row in reader:
+      datum = np.array(int(row['u'])) #create user like this: 0000100000
 
-			questions = np.fromiter(map(float, list(row.values())[1:16]), dtype=np.int) #get question responses
-			datum = np.append(datum, questions) #add questions to sample array
-			dataset[i] = datum #add sample to dataset
-			i = i + 1
-		return dataset
+      questions = np.fromiter(map(float, list(row.values())[1:16]), dtype=np.int) #get question responses
+      datum = np.append(datum, questions) #add questions to sample array
+      dataset[i] = datum #add sample to dataset
+      i = i + 1
+    return dataset
 
 def splitDataset(dataset, test, splitPoint):
-	testName, x, y = test
+  testName, x, y = test
 
-	np.random.shuffle(dataset)
+  np.random.shuffle(dataset)
 
-	trainingData = dataset[:splitPoint]
-	validationData = dataset[splitPoint:]
+  trainingData = dataset[:splitPoint]
+  validationData = dataset[splitPoint:]
 
-	trainingX = trainingData[..., nums(x)]
-	trainingY = trainingData[..., nums(y)]
-	
-	validationX = validationData[..., nums(x)]
-	validationY = validationData[..., nums(y)]
-	return (trainingX, trainingY, validationX, validationY)
+  trainingX = trainingData[..., nums(x)]
+  trainingY = trainingData[..., nums(y)]
+  
+  validationX = validationData[..., nums(x)]
+  validationY = validationData[..., nums(y)]
+  return (trainingX, trainingY, validationX, validationY)
 
 def runManifold(tup):
-	trainingX, trainingY, validationX, validationY = tup
+  trainingX, trainingY, validationX, validationY = tup
 
-	scaledX = preprocessing.scale(trainingX)
+  scaledX = preprocessing.scale(trainingX)
 
-	tsneEmbedment = TSNE(n_components=2).fit_transform(scaledX)
-	kmeansClusters = KMeans(n_clusters=kclusters, random_state=0).fit(scaledX).labels_
+  tsneEmbedment = TSNE(n_components=2).fit_transform(scaledX)
+  kmeansClusters = KMeans(n_clusters=kclusters, random_state=0).fit(scaledX).labels_
 
-	return (tsneEmbedment, kmeansClusters)
+  return (tsneEmbedment, kmeansClusters)
 
 
 def printResults(results):
-	embedment, clusters = results
+  embedment, clusters = results
 
-	print("Manifold")
-	print("Training samples: " + str(sampleCount))
+  print("Manifold")
+  print("Training samples: " + str(sampleCount))
 #	print(embedment)
 
 
-	#print(str(mse), file=sys.stderr)
+  #print(str(mse), file=sys.stderr)
 
 
 def nums(inputList):
-	ret = []
+  ret = []
 
-	for name in inputList:
-		ret.append(names.index(name))
-	return ret
+  for name in inputList:
+    ret.append(names.index(name))
+  return ret
 
 main()

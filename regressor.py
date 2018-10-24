@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
+from sklearn import preprocessing
 import csv
 import sys
 
@@ -28,96 +29,98 @@ quiz3 = "q3"
 assignment = "a0"
 
 tests = [
-	('Everything (but enjoyment) -> enjoyment', [user, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], [enjoy]),
-	('Flow -> enjoyment + motivation', [skills, prepare, time, conscious], [enjoy, motivated]),
-	('Epistemic curiosity -> enjoyment + motivation', [new, unexpected, learnt, better], [enjoy, motivated]),
-	('Everything (including motivated) -> motivated', [user, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], [motivated]),
-	('Quizzes -> assignment', [quiz0, quiz1, quiz2, quiz3], [assignment]),
+  ('Everything (but enjoyment) -> enjoyment', [user, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], [enjoy]),
+  ('Flow -> enjoyment + motivation', [skills, prepare, time, conscious], [enjoy, motivated]),
+  ('Epistemic curiosity -> enjoyment + motivation', [new, unexpected, learnt, better], [enjoy, motivated]),
+  ('Everything (including motivated) -> motivated', [user, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], [motivated]),
+  ('Quizzes -> assignment', [quiz0, quiz1, quiz2, quiz3], [assignment]),
 ]
 
 percents = [0.7]
 
 def main():
-	dataset = loadDataset('mvp2.csv')
+  dataset = loadDataset('mvp2.csv')
 
-	for test in tests:
-		for p in percents:
-			splitPoint = int(p * sampleCount)
+  for test in tests:
+    for p in percents:
+      splitPoint = int(p * sampleCount)
 
-			samples = splitDataset(dataset, test, splitPoint)
+      samples = splitDataset(dataset, test, splitPoint)
 
-			results = runRegressor(samples)
-			printResults(results, samples[3], test[0])
+      results = runRegressor(samples)
+      printResults(results, samples[3], test[0])
 
 
 def loadDataset(filename):
-	with open(filename, 'r') as csvfile:
-		reader = csv.DictReader(csvfile)
+  with open(filename, 'r') as csvfile:
+    reader = csv.DictReader(csvfile)
 
-		dataset = np.zeros((sampleCount, studentCount + questionCount)) #initialise dataset array
+    dataset = np.zeros((sampleCount, studentCount + questionCount)) #initialise dataset array
 
-		i = 0
-		for row in reader:
-			datum = np.zeros(studentCount) #create user like this: 0000100000
-			datum[int(row['u'])] = 1
+    i = 0
+    for row in reader:
+      datum = np.zeros(studentCount) #create user like this: 0000100000
+      datum[int(row['u'])] = 1
 
-			questions = np.fromiter(map(float, list(row.values())[1:16]), dtype=np.int) #get question responses
-			datum = np.append(datum, questions) #add questions to sample array
-			dataset[i] = datum #add sample to dataset
-			i = i + 1
-		return dataset
+      questions = np.fromiter(map(float, list(row.values())[1:16]), dtype=np.int) #get question responses
+      datum = np.append(datum, questions) #add questions to sample array
+      dataset[i] = datum #add sample to dataset
+      i = i + 1
+    return dataset
 
 def splitDataset(dataset, test, splitPoint):
-	testName, x, y = test
+  testName, x, y = test
 
-	np.random.shuffle(dataset)
+  dataset = preprocessing.scale(dataset)
 
-	trainingData = dataset[:splitPoint]
-	validationData = dataset[splitPoint:]
+  np.random.shuffle(dataset)
 
-	trainingX = trainingData[..., nums(x)]
-	trainingY = trainingData[..., nums(y)]
-	
-	validationX = validationData[..., nums(x)]
-	validationY = validationData[..., nums(y)]
-	return (trainingX, trainingY, validationX, validationY)
+  trainingData = dataset[:splitPoint]
+  validationData = dataset[splitPoint:]
+
+  trainingX = trainingData[..., nums(x)]
+  trainingY = trainingData[..., nums(y)]
+  
+  validationX = validationData[..., nums(x)]
+  validationY = validationData[..., nums(y)]
+  return (trainingX, trainingY, validationX, validationY)
 
 def runRegressor(tup):
-	trainingX, trainingY, validationX, validationY = tup
-	regr = RandomForestRegressor()
+  trainingX, trainingY, validationX, validationY = tup
+  regr = RandomForestRegressor()
 
-	if len(trainingY[0]) == 1:
-		regr.fit(trainingX, np.ravel(trainingY))
-	else:
-		regr.fit(trainingX, trainingY)
+  if len(trainingY[0]) == 1:
+    regr.fit(trainingX, np.ravel(trainingY))
+  else:
+    regr.fit(trainingX, trainingY)
 
-	prediction = regr.predict(validationX)
-	score = regr.score(validationX, validationY)
-	return prediction, score
+  prediction = regr.predict(validationX)
+  score = regr.score(validationX, validationY)
+  return prediction, score
 
 
 
 def printResults(results, answers, testName):
-	prediction, score = results
-	mse = mean_squared_error(answers, prediction)
+  prediction, score = results
+  mse = mean_squared_error(answers, prediction)
 
-	print("Test: " + testName)
-	print("Training samples: " + str(sampleCount - len(answers)))
-	print("Validation samples: " + str(len(answers)))
-	print("Coefficient of determination: " + str(score))
-	print("Mean squared error: " + str(mse) + "\n")
+  print("Test: " + testName)
+  print("Training samples: " + str(sampleCount - len(answers)))
+  print("Validation samples: " + str(len(answers)))
+  print("Coefficient of determination: " + str(score))
+  print("Mean squared error: " + str(mse) + "\n")
 
-	#print(str(mse), file=sys.stderr)
+  #print(str(mse), file=sys.stderr)
 
 
 def nums(inputList):
-	ret = []
+  ret = []
 
-	for name in inputList:
-		if(name is 'user'):
-			ret.extend(range(studentCount))
-		else:
-			ret.append(names.index(name))
-	return ret
+  for name in inputList:
+    if(name is 'user'):
+      ret.extend(range(studentCount))
+    else:
+      ret.append(names.index(name))
+  return ret
 
 main()
