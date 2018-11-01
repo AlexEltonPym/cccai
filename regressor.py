@@ -6,10 +6,10 @@ import csv
 import sys
 
 studentCount = 33
-questionCount = 15
+questionCount = 16
 sampleCount = 125
 
-names = ['u%d' % i for i in range(studentCount)] + ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','q0','q1','q2','q3','a0']
+names = ['u%d' % i for i in range(studentCount)] + ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','q0','q1','q2','q3','a0','qc']
 
 user = "user"
 enjoy = "s0"
@@ -27,6 +27,7 @@ quiz1 = "q1"
 quiz2 = "q2"
 quiz3 = "q3"
 assignment = "a0"
+combined = "qc"
 
 tests = [
   ('Everything (but enjoyment) -> enjoyment', [user, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], [enjoy]),
@@ -34,12 +35,13 @@ tests = [
   ('Epistemic curiosity -> enjoyment + motivation', [new, unexpected, learnt, better], [enjoy, motivated]),
   ('Everything (including motivated) -> motivated', [user, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], [motivated]),
   ('Quizzes -> assignment', [quiz0, quiz1, quiz2, quiz3], [assignment]),
+  ('QC -> Quizzes', [combined], [quiz0, quiz1, quiz2, quiz3, assignment])
 ]
 
 percents = [0.7]
 
 def main():
-  dataset = loadDataset('mvp2.csv')
+  dataset = loadDataset('mvp2std.csv')
 
   for test in tests:
     for p in percents:
@@ -62,7 +64,7 @@ def loadDataset(filename):
       datum = np.zeros(studentCount) #create user like this: 0000100000
       datum[int(row['u'])] = 1
 
-      questions = np.fromiter(map(float, list(row.values())[1:16]), dtype=np.int) #get question responses
+      questions = np.fromiter(map(float, list(row.values())[1:questionCount+1]), dtype=np.int) #get question responses
       datum = np.append(datum, questions) #add questions to sample array
       dataset[i] = datum #add sample to dataset
       i = i + 1

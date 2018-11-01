@@ -7,11 +7,12 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
 
-questionCount = 15
-sampleCount = 125
-kclusters = 5
+kclusters = 3
 
-names = ['u', 's0','s1','s2','s3','s4','s5','s6','s7','s8','s9','q0','q1','q2','q3','a0']
+questionCount = 16
+sampleCount = 125
+
+names = ['u', 's0','s1','s2','s3','s4','s5','s6','s7','s8','s9','q0','q1','q2','q3','a0', 'qc']
 
 user = "u"
 enjoy = "s0"
@@ -29,16 +30,16 @@ quiz1 = "q1"
 quiz2 = "q2"
 quiz3 = "q3"
 assignment = "a0"
+combined = "qc"
 
 
 tests = [
-  ('Everything', [enjoy, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], []),
+  # ('Quizzes', [quiz0, quiz1, quiz2, quiz3, assignment], []),
+ ('Everything', [enjoy, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], []),
 ]
 
-
-
 def main():
-  dataset = loadDataset('mvp2.csv')
+  dataset = loadDataset('mvp2std.csv')
 
   samples = splitDataset(dataset, tests[0], sampleCount)
 
@@ -58,8 +59,6 @@ def plotResults(results):
   plt.scatter(X, Y, s=area, c=clusters)
   plt.savefig("clusterfigk"+str(kclusters)+".svg")
 
-
-
 def loadDataset(filename):
   with open(filename, 'r') as csvfile:
     reader = csv.DictReader(csvfile)
@@ -70,7 +69,7 @@ def loadDataset(filename):
     for row in reader:
       datum = np.array(int(row['u'])) #create user like this: 0000100000
 
-      questions = np.fromiter(map(float, list(row.values())[1:16]), dtype=np.int) #get question responses
+      questions = np.fromiter(map(float, list(row.values())[1:questionCount+1]), dtype=np.int) #get question responses
       datum = np.append(datum, questions) #add questions to sample array
       dataset[i] = datum #add sample to dataset
       i = i + 1
@@ -79,7 +78,7 @@ def loadDataset(filename):
 def splitDataset(dataset, test, splitPoint):
   testName, x, y = test
 
-  np.random.shuffle(dataset)
+ # np.random.shuffle(dataset)
 
   trainingData = dataset[:splitPoint]
   validationData = dataset[splitPoint:]
@@ -108,6 +107,7 @@ def printResults(results):
   print("Manifold")
   print("Training samples: " + str(sampleCount))
 #	print(embedment)
+  print(clusters)
 
 
   #print(str(mse), file=sys.stderr)
