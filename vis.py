@@ -1,13 +1,10 @@
 import numpy as np
-from sklearn.manifold import TSNE
 import csv
 import sys
 from sklearn import preprocessing
 import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
-
-
-kclusters = 3
+import random
+import time as sleepy
 
 questionCount = 16
 sampleCount = 125
@@ -34,30 +31,43 @@ combined = "qc"
 
 
 tests = [
-  # ('Quizzes', [quiz0, quiz1, quiz2, quiz3, assignment], []),
- ('Everything', [enjoy, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], []),
+ #('Everything', [enjoy, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], []),
+ ('Flow', [enjoy, skills, prepare, time, conscious], []),
 ]
 
 def main():
   dataset = loadDataset('mvp2std.csv')
-
   samples = splitDataset(dataset, tests[0], sampleCount)
 
-  results = runManifold(samples)
-  printResults(results)
+  plotResults(samples[0])
 
-  plotResults(results)
-
-def plotResults(results):
-  embedment, clusters = results
-  X = [x[0] for x in embedment]
-  Y = [y[1] for y in embedment]
+def plotResults(data):
+  print(data[0])
+  enjoyment = [row[0] for row in data]
+  skill = [row[1] for row in data]
+  challenge = [row[2] for row in data]
   
-  area = 10  # 0 to 15 point radii
-  plt.set_cmap('Accent')
 
-  plt.scatter(X, Y, s=area, c=clusters)
-  plt.savefig("clusterfigk"+str(kclusters)+".svg")
+  minE = min(enjoyment)
+  maxE = max(enjoyment)
+  minS = min(skill)
+  maxS = max(skill)
+  minC = min(challenge)
+  maxC = max(challenge)
+
+  print(minE, maxE)
+  for i in range(len(enjoyment)):
+    enjoyment[i] = (enjoyment[i]-minE)/(maxE-minE)
+    skill[i] = (skill[i]-minS)/(maxS-minS)+random.random()/10
+    challenge[i] = (challenge[i]-minC)/(maxC-minC)+random.random()/10
+  print()
+  print(enjoyment)
+
+  plt.scatter(skill, challenge, s=15, c=enjoyment, cmap="viridis", alpha=1)
+  plt.colorbar(alpha=1)
+  
+  #plt.show()
+  plt.savefig("flowDiagram.svg")
 
 def loadDataset(filename):
   with open(filename, 'r') as csvfile:
@@ -72,6 +82,7 @@ def loadDataset(filename):
       questions = np.fromiter(map(float, list(row.values())[1:questionCount+1]), dtype=np.float) #get question responses
       datum = np.append(datum, questions) #add questions to sample array
       dataset[i] = datum #add sample to dataset
+      print(row)
       i = i + 1
     return dataset
 
@@ -89,29 +100,6 @@ def splitDataset(dataset, test, splitPoint):
   validationX = validationData[..., nums(x)]
   validationY = validationData[..., nums(y)]
   return (trainingX, trainingY, validationX, validationY)
-
-def runManifold(tup):
-  trainingX, trainingY, validationX, validationY = tup
-
-  scaledX = preprocessing.scale(trainingX)
-
-  tsneEmbedment = TSNE(n_components=2).fit_transform(scaledX)
-  kmeansClusters = KMeans(n_clusters=kclusters, random_state=0).fit(scaledX).labels_
-
-  return (tsneEmbedment, kmeansClusters)
-
-
-def printResults(results):
-  embedment, clusters = results
-
-  print("Manifold")
-  print("Training samples: " + str(sampleCount))
-#	print(embedment)
-  print(clusters)
-
-
-  #print(str(mse), file=sys.stderr)
-
 
 def nums(inputList):
   ret = []

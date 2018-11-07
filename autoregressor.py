@@ -79,7 +79,7 @@ def loadDataset(filename):
       datum = np.zeros(studentCount) #create user like this: 0000100000
       datum[int(row['u'])] = 1
 
-      questions = np.fromiter(map(float, list(row.values())[1:questionCount+1]), dtype=np.int) #get question responses
+      questions = np.fromiter(map(float, list(row.values())[1:questionCount+1]), dtype=np.float) #get question responses
       datum = np.append(datum, questions) #add questions to sample array
       dataset[i] = datum #add sample to dataset
       i = i + 1
