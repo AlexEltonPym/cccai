@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 624.1 575.9" style="enable-background:new 0 0 624.1 575.9;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#000000;stroke-miterlimit:10;}
+	.st1{font-family:'Helvetica';}
+	.st2{font-size:21.2657px;}
+	.st3{font-family:'Helvetica-Bold';}
+	.st4{display:none;fill:none;stroke:#000000;stroke-miterlimit:10;}
+	.st5{fill:#29ABE2;stroke:#000000;stroke-miterlimit:10;}
+	.st6{display:none;}
+	.st7{display:inline;fill:#29ABE2;stroke:#000000;stroke-miterlimit:10;}
+	.st8{fill:none;}
+	.st9{font-size:36px;}
+</style>
+<g id="Layer_1">
+	<g>
+		<g>
+			<line class="st0" x1="114" y1="507.7" x2="567.6" y2="507.7"/>
+			<g>
+				<g>
+					<line class="st0" x1="114" y1="507.7" x2="114" y2="496.4"/>
+					<line class="st0" x1="567.6" y1="507.7" x2="567.6" y2="54.1"/>
+				</g>
+				<g>
+				</g>
+			</g>
+		</g>
+		<g>
+			<g>
+				<text transform="matrix(1 0 0 1 59.587 492.6233)" class="st1 st2">Easy</text>
+				<text transform="matrix(1 0 0 1 5.2394 288.8881)" class="st3 st2">Challenge</text>
+				<text transform="matrix(1 0 0 1 60.7711 86.4542)" class="st1 st2">Hard</text>
+			</g>
+			<line class="st0" x1="114" y1="507.7" x2="114" y2="54.1"/>
+			<g>
+				<g>
+					<line class="st0" x1="114" y1="280.9" x2="114" y2="280.9"/>
+					<line class="st0" x1="114" y1="54.1" x2="567.6" y2="54.1"/>
+				</g>
+				<g>
+				</g>
+			</g>
+		</g>
+		<g>
+			<g>
+			</g>
+			<g>
+			</g>
+		</g>
+	</g>
+	<text transform="matrix(1 0 0 1 121.2356 533.7375)" class="st1 st2">Low</text>
+	<text transform="matrix(1 0 0 1 319.9793 533.738)" class="st3 st2">Skill</text>
+	<text transform="matrix(1 0 0 1 517.9258 533.7379)" class="st1 st2">High</text>
+	<rect x="428.7" y="54.4" class="st4" width="138.9" height="138.9"/>
+	<rect x="113.7" y="369.4" class="st4" width="138.9" height="138.9"/>
+</g>
+<g id="Layer_2">
+	<polygon class="st5" points="113.6,507.5 428.7,54.4 567.6,54.4 567.6,193.3 	"/>
+</g>
+<g id="Layer_3" class="st6">
+	<polygon class="st7" points="113.7,369.4 428.7,54.4 567.6,54.4 567.6,193.3 252.6,508.3 113.7,508.3 	"/>
+</g>
+<g id="Layer_4">
+	
+		<rect x="304.1" y="235.1" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -85.957 359.3028)" class="st8" width="173.3" height="96.7"/>
+	<text transform="matrix(0.7071 -0.7071 0.7071 0.7071 313.6023 328.7875)" class="st3 st9">Flow</text>
+</g>
+</svg>

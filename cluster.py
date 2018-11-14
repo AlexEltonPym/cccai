@@ -93,7 +93,7 @@ def splitDataset(dataset, test, splitPoint):
 def runManifold(tup):
   trainingX, trainingY, validationX, validationY = tup
 
-  scaledX = preprocessing.scale(trainingX)
+  scaledX = trainingX #standardized in excel
 
   tsneEmbedment = TSNE(n_components=2).fit_transform(scaledX)
   kmeansClusters = KMeans(n_clusters=kclusters, random_state=0).fit(scaledX).labels_
@@ -104,14 +104,8 @@ def runManifold(tup):
 def printResults(results):
   embedment, clusters = results
 
-  print("Manifold")
-  print("Training samples: " + str(sampleCount))
-#	print(embedment)
-  print(clusters)
-
-
-  #print(str(mse), file=sys.stderr)
-
+  print("Clusters, k = "+str(kclusters))
+  print(*clusters, sep = "\n") 
 
 def nums(inputList):
   ret = []

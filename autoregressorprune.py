@@ -8,10 +8,10 @@ import sys
 import itertools
 
 studentCount = 33
-questionCount = 16
+questionCount = 17
 sampleCount = 125
 
-names = ['u%d' % i for i in range(studentCount)] + ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','q0','q1','q2','q3','a0','qc']
+names = ['u%d' % i for i in range(studentCount)] + ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','q0','q1','q2','q3','a0','qc', 'c']
 
 user = "user"
 enjoy = "s0"
@@ -30,12 +30,13 @@ quiz2 = "q2"
 quiz3 = "q3"
 assignment = "a0"
 combined = "qc"
+cluster = "c"
 
 tests = []
 
 
 
-autoQuestions = [user, enjoy, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated, combined]
+autoQuestions = [enjoy, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated, combined, cluster]
 for n in range(len(autoQuestions)-1):
   tests.append([])
   comb = itertools.combinations(autoQuestions, n+1)
@@ -47,7 +48,6 @@ for n in range(len(autoQuestions)-1):
         newTest = ['auto' + str(n) + " " + str(c) + " -> " + str(a), c, a, 0, 0]
         tests[n].append(newTest)
 
-print(len(tests))
 
 
 
@@ -61,7 +61,7 @@ percents = [0.7]
 
 def main():
   dataset = loadDataset('mvp2std.csv')
-  print("u,s0,s1,s2,s3,s4,s5,s6,s7,s8,s9,qc,pred,mse,score")
+  print("s0,s1,s2,s3,s4,s5,s6,s7,s8,s9,qc,c,pred,mse,score")
   for testRow in tests:
     for test in testRow:
       for p in percents:
@@ -83,14 +83,14 @@ def main():
         for i, compareRow in enumerate(tests[currentRowMax:]):
           tests[currentRowMax+i] = list(filter(lambda compare: not(set(test[0]).issubset(compare[0]) and test[1] > compare[1] and test[2] == compare[2]) , compareRow))
           
-          
+
   for test in itertools.chain.from_iterable(tests):
     strBuild = ""
     for q in autoQuestions:
       if(q in test[1]):
-        strBuild += "+,"
+        strBuild += "y,"
       else:
-        strBuild += "-,"
+        strBuild += "n,"
     strBuild += str(test[2][0]) + ","
     strBuild += str(test[4]) + "," + str(test[3])
     print(strBuild)
@@ -163,9 +163,9 @@ def saveResults(results, answers, test):
   strBuild = ""
   for q in autoQuestions:
     if(q in test[1]):
-      strBuild += "+,"
+      strBuild += "y,"
     else:
-      strBuild += "-,"
+      strBuild += "n,"
   strBuild += str(test[2][0]) + ","
   strBuild += str(mse) + "," + str(score)
   print(strBuild)
