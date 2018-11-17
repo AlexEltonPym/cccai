@@ -58,8 +58,8 @@ def plotResults(data):
   print(minE, maxE)
   for i in range(len(enjoyment)):
     enjoyment[i] = (enjoyment[i]-minE)/(maxE-minE)
-    skill[i] = (skill[i]-minS)/(maxS-minS)+random.random()/10
-    challenge[i] = (challenge[i]-minC)/(maxC-minC)+random.random()/10
+    skill[i] = (skill[i]-minS)/(maxS-minS)
+    challenge[i] = (challenge[i]-minC)/(maxC-minC)
   print()
   print(enjoyment)
 

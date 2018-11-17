@@ -34,8 +34,8 @@ combined = "qc"
 
 
 tests = [
-  # ('Quizzes', [quiz0, quiz1, quiz2, quiz3, assignment], []),
- ('Everything', [enjoy, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], []),
+   ('Quizzes', [quiz0, quiz1, quiz2, quiz3, assignment], []),
+ #('Everything', [enjoy, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated], []),
 ]
 
 def main():
@@ -46,17 +46,18 @@ def main():
   results = runManifold(samples)
   printResults(results)
 
-  plotResults(results)
+  plotResults(dataset, results)
 
-def plotResults(results):
+def plotResults(dataset, results):
   embedment, clusters = results
   X = [x[0] for x in embedment]
   Y = [y[1] for y in embedment]
-  
+  A = [(a[16]*a[16]) for a in dataset]
+
   area = 10  # 0 to 15 point radii
   plt.set_cmap('Accent')
 
-  plt.scatter(X, Y, s=area, c=clusters)
+  plt.scatter(X, Y, s=A, c=clusters)
   plt.savefig("clusterfigk"+str(kclusters)+".svg")
 
 def loadDataset(filename):
@@ -96,8 +97,10 @@ def runManifold(tup):
   scaledX = trainingX #standardized in excel
 
   tsneEmbedment = TSNE(n_components=2).fit_transform(scaledX)
-  kmeansClusters = KMeans(n_clusters=kclusters, random_state=0).fit(scaledX).labels_
-
+  km = KMeans(n_clusters=kclusters, random_state=0)
+  km.fit(scaledX)
+  kmeansClusters = km.labels_
+  print(km.score(scaledX))
   return (tsneEmbedment, kmeansClusters)
 
 
@@ -105,7 +108,7 @@ def printResults(results):
   embedment, clusters = results
 
   print("Clusters, k = "+str(kclusters))
-  print(*clusters, sep = "\n") 
+  #print(*clusters, sep = "\n") 
 
 def nums(inputList):
   ret = []

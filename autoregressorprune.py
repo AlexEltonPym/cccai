@@ -8,10 +8,10 @@ import sys
 import itertools
 
 studentCount = 33
-questionCount = 17
+questionCount = 19
 sampleCount = 125
 
-names = ['u%d' % i for i in range(studentCount)] + ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','q0','q1','q2','q3','a0','qc', 'c']
+names = ['u%d' % i for i in range(studentCount)] + ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','q0','q1','q2','q3','a0','qc', 'c1', 'c2', 'c3']
 
 user = "user"
 enjoy = "s0"
@@ -30,13 +30,15 @@ quiz2 = "q2"
 quiz3 = "q3"
 assignment = "a0"
 combined = "qc"
-cluster = "c"
+cluster1 = "c1"
+cluster2 = "c2"
+cluster3 = "c3"
 
 tests = []
 
 
 
-autoQuestions = [enjoy, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated, combined, cluster]
+autoQuestions = [enjoy, skills, prepare, time, conscious, new, unexpected, learnt, better, motivated, combined, cluster1, cluster2, cluster3]
 for n in range(len(autoQuestions)-1):
   tests.append([])
   comb = itertools.combinations(autoQuestions, n+1)
@@ -45,6 +47,7 @@ for n in range(len(autoQuestions)-1):
     for a in autoQuestions: #for each answer
       if(a not in c):
         a = [a]
+
         newTest = ['auto' + str(n) + " " + str(c) + " -> " + str(a), c, a, 0, 0]
         tests[n].append(newTest)
 
@@ -60,8 +63,8 @@ percents = [0.7]
 
 
 def main():
-  dataset = loadDataset('mvp2std.csv')
-  print("s0,s1,s2,s3,s4,s5,s6,s7,s8,s9,qc,c,pred,mse,score")
+  dataset = loadDataset('mvp2stdc.csv')
+  print("s0,s1,s2,s3,s4,s5,s6,s7,s8,s9,qc,c1,c2,c3,pred,mse,score")
   for testRow in tests:
     for test in testRow:
       for p in percents:
